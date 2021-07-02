@@ -1,66 +1,69 @@
-const lista=document.getElementById("lista-notas");
-
 aplicacion();
 
 function aplicacion(){
-    const form=document.getElementById("añadir");
-    form.addEventListener("submit",agregarNota);
 
-    lista.addEventListener("click",eliminarNota);
-}
-
-
-function agregarNota(e){
-
-    e.preventDefault();
-
-    const nota=document.getElementById("textarea").value;
-    const li=document.createElement("li");
-    const borrar=document.createElement("a");
-
-    borrar.classList="borrar";
-    borrar.innerText="Borrar";
-    li.innerText=nota;
-    
-    lista.appendChild(li);
-    li.appendChild(borrar);
-
-    agregarLocalStorange(nota);
+    agregarNota();
+    eliminarNota();
     
 }
 
-//AGREGAR A LOCAL STORANGE
 
-function agregarLocalStorange(nota){
-    let notas;
-    notas=agregarLs();
+//agregar Nota
+function agregarNota(){
+    //agregar Nota al doom
+    let sumbit=document.getElementById("añadir");
 
-    notas.push(nota);
-    localStorage.setItem("notas", JSON.stringify(notas));
-    localStorage.setItem("notas", nota);
+    sumbit.addEventListener("submit",(e)=>{
+        let nota=document.getElementById("textarea").value;
 
+        e.preventDefault();
+        const li=document.createElement("li");
+        const borrar=document.createElement("a");
+        borrar.innerText="Borrar";
+        borrar.classList="borrar";
+        li.innerText=nota;
+        li.appendChild(borrar);
+        const lista=document.getElementById("lista-notas").appendChild(li);
+        agregarLs(nota);
+    }); 
+
+    //agregar nota al local Storange
+    function agregarLs(nota){
+        let notas;
+        notas=notasLs();
+        notas.push(nota);
+        localStorage.setItem("notas",JSON.stringify(notas));
+
+
+            function notasLs(){
+                let notas;
+        
+                if(localStorage.getItem("notas")===null){
+                    notas=[];
+                }
+                else{
+                    notas=JSON.parse(localStorage.getItem("notas"));
+                }
+                return notas;
+            }
+    };
+        
+        
+
+    
 }
 
-function agregarLs(){
-    let notas;
+//borrar nota del Doom
 
-        if(localStorage.getItem("notas")===null){
-            notas=[];
+function eliminarNota(){
+    const lista=document.getElementById("lista-notas");
+    lista.addEventListener("click",(e)=>{
+        if(e.target.className==="borrar"){
+            e.target.parentElement.remove();
         }
-        else{
-            notas=JSON.parse(localStorage.getItem("notass"));
-        }
-        return notas;
+
+
+        
+    })
 
 }
-
-
-
-//ELIMINAR NOTA
-function eliminarNota(e){
-    e.preventDefault();
-    if(e.target.className==="borrar"){
-        console.log(e.target.parentElement.remove());
-    }
-}
-
